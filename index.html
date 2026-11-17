@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Анкета для картки викладача — GoITeens</title>
+<style>
+  :root{--bg:#f6f5f2;--card:#fff;--ink:#1d1d1f;--muted:#6b6b70;--line:#e3e1dc;--accent:#ffc629;--accent-soft:#fff8e0;--ok:#1f8a4c}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  .wrap{max-width:760px;margin:0 auto;padding:32px 20px 64px}
+  header .logo{height:40px;width:auto;display:block;margin-bottom:24px}
+  header h1{font-size:28px;line-height:1.2;margin:0 0 8px}
+  header p{color:var(--muted);margin:0 0 24px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;margin-bottom:16px}
+  section h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:0 0 16px}
+  .field{margin-bottom:20px}
+  .field:last-child{margin-bottom:0}
+  label.q{display:block;font-weight:600;margin-bottom:4px}
+  .hint{font-size:14px;color:var(--muted);margin:0 0 8px}
+  input[type=text],input[type=number],input[type=url],textarea,select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:transparent}
+  textarea{resize:vertical;min-height:72px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:560px){.row{grid-template-columns:1fr}}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chips label{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid var(--line);border-radius:999px;cursor:pointer;font-size:15px;user-select:none}
+  .chips input{accent-color:var(--accent)}
+  .chips label:has(input:checked){background:var(--accent-soft);border-color:var(--accent)}
+  .req{color:var(--accent)}
+  .preview{background:var(--accent-soft);border:1px dashed var(--accent)}
+  .preview textarea{min-height:190px;background:#fff}
+  .meta{display:flex;justify-content:space-between;font-size:14px;color:var(--muted);margin-top:6px}
+  .warn{color:#b3261e}
+  button{font:inherit;font-weight:600;border:0;border-radius:12px;padding:14px 22px;cursor:pointer}
+  .primary{background:var(--accent);color:#111}
+  .primary:disabled{opacity:.5;cursor:default}
+  .ghost{background:transparent;border:1px solid var(--line)}
+  .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px}
+  .status{margin-top:12px;font-weight:600}
+  .status.ok{color:var(--ok)} .status.err{color:#b3261e}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img class="logo" src="data:image/png;base64,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" alt="GoITeens">
+    <h1>Анкета для вашої картки в чаті з батьками</h1>
+    <p>Займе 5 хвилин. На основі відповідей автоматично складеться короткий опис від вашого імені, який батьки побачать на старті групи. Наприкінці ви зможете його переглянути й підправити.</p>
+  </header>
+
+  <form id="f" novalidate>
+    <section>
+      <h2>Про вас</h2>
+      <div class="field">
+          <label class="q" for="name">Ім'я та прізвище <span class="req">*</span></label>
+          <input id="name" type="text" required placeholder="Олена Коваль">
+        </div>
+    </section>
+
+    <section>
+      <h2>Досвід у цифрах</h2>
+      <div class="row">
+        <div class="field">
+          <label class="q" for="yKids">Скільки років працюєте з дітьми та підлітками? <span class="req">*</span></label>
+          <p class="hint">Увесь досвід: школа, табори, гуртки, репетиторство тощо.</p>
+          <input id="yKids" type="number" min="1" max="50" required>
+        </div>
+        <div class="field">
+          <label class="q" for="ySoft">Скільки років викладаєте м'які навички / життєві навички? <span class="req">*</span></label>
+          <p class="hint">Комунікація, лідерство, емоційний інтелект, публічні виступи…</p>
+          <input id="ySoft" type="number" min="1" max="50" required>
+        </div>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label class="q" for="groups">Скільки груп ви випустили? <span class="req">*</span></label>
+          <p class="hint">Приблизно, в усіх місцях роботи.</p>
+          <input id="groups" type="number" min="1" max="2000" required>
+        </div>
+        <div class="field">
+          <label class="q" for="students">Скільки учнів пройшли з вами навчання? <span class="req">*</span></label>
+          <p class="hint">Приблизно. Якщо не рахували — груп × середній розмір групи.</p>
+          <input id="students" type="number" min="1" max="50000" required>
+        </div>
+      </div>
+      <div class="field">
+        <label class="q">З якими віковими групами працюєте?</label>
+        <div class="chips" id="ages">
+          <label><input type="checkbox" value="5–7"> 5–7 років</label>
+          <label><input type="checkbox" value="7–10"> 7–10 років</label>
+          <label><input type="checkbox" value="10–12"> 10–12 років</label>
+          <label><input type="checkbox" value="13–17"> 13–17 років</label>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Досвід і підхід</h2>
+      <div class="field">
+        <label class="q">Де ще ви працювали з дітьми?</label>
+        <p class="hint">Оберіть усе, що підходить.</p>
+        <div class="chips" id="exp">
+          <label><input type="checkbox" value="вожатство в дитячих таборах"> табори / вожатство</label>
+          <label><input type="checkbox" value="робота в школі"> школа</label>
+          <label><input type="checkbox" value="психологічна практика"> психологія</label>
+          <label><input type="checkbox" value="тренінги й коучинг"> тренінги / коучинг</label>
+          <label><input type="checkbox" value="позашкільна освіта та гуртки"> гуртки / позашкілля</label>
+          <label><input type="checkbox" value="репетиторство"> репетиторство</label>
+          <label><input type="checkbox" value="спортивне тренерство"> спорт / тренерство</label>
+          <label><input type="checkbox" value="волонтерство з дітьми"> волонтерство</label>
+          <label><input type="checkbox" value="театральна та сценічна практика"> театр / сцена</label>
+        </div>
+      </div>
+      <div class="field">
+        <label class="q" for="edu">Освіта чи навчання, що стосується роботи з дітьми</label>
+        <p class="hint">Коротко, 1 рядок. Наприклад: «психологія, сертифікат з фасилітації». Предмет, який ви викладаєте в школі, тут не потрібен.</p>
+        <input id="edu" type="text" placeholder="педагогічна психологія, курс з емоційного інтелекту">
+      </div>
+      <div class="field">
+        <label class="q">Що у вас виходить найкраще на заняттях? <span class="req">*</span></label>
+        <p class="hint">Оберіть до 3 варіантів.</p>
+        <div class="chips" id="strengths">
+          <label><input type="checkbox" value="створюю атмосферу, де не страшно помилятися"> безпечна атмосфера</label>
+          <label><input type="checkbox" value="залучаю навіть найтихіших учнів"> залучаю тихих дітей</label>
+          <label><input type="checkbox" value="перетворюю навчання на гру"> ігровий формат</label>
+          <label><input type="checkbox" value="допомагаю дітям впевнено виступати перед аудиторією"> публічні виступи</label>
+          <label><input type="checkbox" value="вчу розуміти й називати свої емоції"> емоції</label>
+          <label><input type="checkbox" value="вчу домовлятися й працювати в команді"> командна робота</label>
+          <label><input type="checkbox" value="допомагаю ставити цілі й доводити справи до кінця"> цілі та відповідальність</label>
+          <label><input type="checkbox" value="даю кожному учню уважний зворотний зв'язок"> зворотний зв'язок кожному</label>
+        </div>
+        <div class="meta"><span></span><span id="strCount">0 / 3</span></div>
+      </div>
+      <div class="field">
+        <label class="q" for="proud">Чим ви найбільше пишаєтеся у своїх учнях?</label>
+        <p class="hint">Одне речення, продовжіть фразу «Найбільше пишаюся, коли учні…»</p>
+        <input id="proud" type="text" placeholder="вперше самі виходять виступати перед класом">
+      </div>
+      <div class="field">
+        <label class="q" for="fact">Цікавий факт про вас або хобі</label>
+        <p class="hint">Необов'язково, але батькам це додає «людяності». Пишіть від першої особи: «граю…», «мандрую…».</p>
+        <input id="fact" type="text" placeholder="граю в настільні ігри й мандрую Карпатами">
+      </div>
+    </section>
+
+    <section class="preview" id="previewBox" style="display:none">
+      <h2>Ваш опис для батьків</h2>
+      <p class="hint">Це чернетка. Можна редагувати прямо тут, перш ніж надіслати.</p>
+      <textarea id="desc"></textarea>
+      <div class="meta"><span id="lenWarn"></span><span id="len">0 символів</span></div>
+    </section>
+
+    <div class="actions">
+      <button type="button" class="ghost" id="genBtn">Скласти опис</button>
+      <button type="submit" class="primary" id="sendBtn" disabled>Надіслати</button>
+    </div>
+    <div class="status" id="status"></div>
+  </form>
+</div>
+
+<script>
+/* ===== НАЛАШТУВАННЯ: вставте сюди URL веб-застосунку Apps Script ===== */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyY6bv7UeOuh_xO4iLE02TIMXXPHW8uNbEsI0KW4-2Kx2R6pDz7eRafjR8JEZAkQFY/exec";
+/* ==================================================================== */
+
+const $ = id => document.getElementById(id);
+const checked = id => [...document.querySelectorAll('#'+id+' input:checked')].map(i => i.value);
+
+function plural(n, one, few, many){
+  const m10 = n % 10, m100 = n % 100;
+  if (m10 === 1 && m100 !== 11) return one;
+  if (m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14)) return few;
+  return many;
+}
+const years = n => `${n} ${plural(n,'рік','роки','років')}`;
+const listUa = arr => arr.length <= 1 ? (arr[0]||'') : arr.slice(0,-1).join(', ') + ' та ' + arr[arr.length-1];
+const clean = s => (s||'').trim().replace(/[.\s]+$/,'');
+const lowerFirst = s => s ? s[0].toLowerCase() + s.slice(1) : s;
+
+function buildDescription(d){
+  const s = [];
+  let exp = `Я вже ${years(d.yKids)} працюю з дітьми та підлітками`;
+  if (d.ySoft && d.ySoft < d.yKids) exp += `, із них ${years(d.ySoft)} викладаю м'які навички`;
+  else exp += ` і весь цей час викладаю м'які навички`;
+  if (d.ages.length) exp += ` (вік моїх учнів — ${listUa(d.ages)} років)`;
+  s.push(exp + '.');
+  s.push(`На моєму рахунку — ${d.groups} ${plural(d.groups,'група','групи','груп')} випускників, загалом ${d.students} ${plural(d.students,'учень','учні','учнів')}.`);
+  if (d.exp.length) s.push(`Окрім GoITeens, за плечима — ${listUa(d.exp)}.`);
+  if (d.edu) s.push(`Освіта та навчання: ${lowerFirst(d.edu)}.`);
+  if (d.strengths.length) s.push(`На заняттях я ${listUa(d.strengths)}.`);
+  if (d.proud) s.push(`Найбільше пишаюся, коли учні ${lowerFirst(d.proud)}.`);
+  if (d.fact) s.push(`Поза заняттями ${lowerFirst(d.fact)}.`);
+  return s.join(' ');
+}
+
+function collect(){
+  return {
+    name: clean($('name').value),
+    yKids: parseInt($('yKids').value,10) || 0,
+    ySoft: parseInt($('ySoft').value,10) || 0,
+    groups: parseInt($('groups').value,10) || 0,
+    students: parseInt($('students').value,10) || 0,
+    ages: checked('ages'),
+    exp: checked('exp'),
+    edu: clean($('edu').value),
+    strengths: checked('strengths'),
+    proud: clean($('proud').value),
+    fact: clean($('fact').value)
+  };
+}
+
+function validate(d){
+  const errs = [];
+  if (!d.name) errs.push("ім'я");
+  if (!d.yKids) errs.push('роки роботи з дітьми');
+  if (!d.ySoft) errs.push('роки викладання м\'яких навичок');
+  if (!d.groups) errs.push('кількість груп');
+  if (!d.students) errs.push('кількість учнів');
+  if (!d.strengths.length) errs.push('сильні сторони');
+  if (d.ySoft > d.yKids) return 'Досвід викладання м\'яких навичок не може бути більшим, ніж загальний досвід роботи з дітьми.';
+  return errs.length ? 'Заповніть, будь ласка: ' + errs.join(', ') + '.' : '';
+}
+
+function setStatus(msg, cls){ const el=$('status'); el.textContent=msg; el.className='status '+(cls||''); }
+
+function updateLen(){
+  const n = $('desc').value.length;
+  $('len').textContent = n + ' символів';
+  $('lenWarn').textContent = n > 750 ? 'Задовго для картки — спробуйте скоротити до ~600.' : '';
+  $('lenWarn').className = n > 750 ? 'warn' : '';
+}
+
+
+document.querySelectorAll('#strengths input').forEach(cb => cb.addEventListener('change', () => {
+  const sel = checked('strengths');
+  if (sel.length > 3) cb.checked = false;
+  $('strCount').textContent = checked('strengths').length + ' / 3';
+}));
+
+$('genBtn').addEventListener('click', () => {
+  const d = collect();
+  const err = validate(d);
+  if (err) { setStatus(err, 'err'); return; }
+  setStatus('');
+  $('desc').value = buildDescription(d);
+  $('previewBox').style.display = 'block';
+  $('sendBtn').disabled = false;
+  $('genBtn').textContent = 'Перескласти опис';
+  updateLen();
+  $('previewBox').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+$('desc').addEventListener('input', updateLen);
+
+$('f').addEventListener('submit', async e => {
+  e.preventDefault();
+  const d = collect();
+  const err = validate(d);
+  if (err) { setStatus(err, 'err'); return; }
+  const payload = {
+    ...d,
+    ages: d.ages.join(', '),
+    exp: d.exp.join(', '),
+    strengths: d.strengths.join('; '),
+    autoDescription: buildDescription(d),
+    finalDescription: $('desc').value.trim()
+  };
+  if (SCRIPT_URL.startsWith('PASTE')) { setStatus('Форма ще не підключена до таблиці (немає SCRIPT_URL).', 'err'); return; }
+  $('sendBtn').disabled = true;
+  setStatus('Надсилаємо…');
+  try {
+    const res = await fetch(SCRIPT_URL, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload) });
+    const text = await res.text();
+    let data = null; try { data = JSON.parse(text); } catch(_) {}
+    if (data && data.ok) {
+      setStatus('Дякуємо! Опис збережено. Команда підготує вашу картку.', 'ok');
+    } else {
+      setStatus('Не вдалося зберегти. Відповідь сервера: ' + (data && data.error ? data.error : (res.status + ' ' + text.slice(0,150))), 'err');
+      $('sendBtn').disabled = false;
+    }
+  } catch (ex) {
+    setStatus('Не вдалося надіслати (' + ex.message + '). Скопіюйте опис і надішліть тімліду вручну.', 'err');
+    $('sendBtn').disabled = false;
+  }
+});
+</script>
+</body>
+</html>
